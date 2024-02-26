@@ -1,10 +1,4 @@
-# Challenge app 2024
-
-App to simulate a very simple ticket management system
-
-Challenge given in curricular intership for intoducing the React framework
-
-## Getting Started with Create React App
+# Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
