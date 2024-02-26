@@ -7,20 +7,6 @@ import "./editTicket.css";
 import { TicketService } from "../../service/ticketService";
 import { ProdutoService } from "../../service/produtoService";
 
-const staticProducts: Produto[] = [{
-	id: 1,
-	nome: "Produto 1"
-	},
-	{
-		id: 2,
-		nome: "Produto 2"
-	},
-	{
-		id: 3,
-		nome: "Produto 3"
-	}
-];
-
 type FormValues = {
   titulo: string,
   desc: string,
@@ -47,13 +33,24 @@ export function EditTicket() {
 
   const {errors} = formState;
 
-  useEffect(() => { 
-    const productServer = new ProdutoService();
+  let {id} = useParams();
 
+  useEffect(() => { 
+
+    if(!id) return;
+
+    const productServer = new ProdutoService();
     productServer.getProdutos().then((produtos) => setProducts(produtos));
+
+    const ticketService = new TicketService();
+    ticketService.getTicketById(parseInt(id)).then((ticket) => {
+      form.setValue('titulo', ticket.titulo);
+      form.setValue('desc', ticket.descricao);
+      form.setValue('prioridade', ticket.prioridade.toString());
+      form.setValue('produto', ticket.produtoId.toString());
+    });
  	}, []); 
 	
-	let {id} = useParams();
 
 	function handleEditClick(data : FormValues) {
     
@@ -83,15 +80,17 @@ export function EditTicket() {
         <h2>Editar ticket</h2> 
 
         <TextField id="titulo" label="Título" 
-        {...register("titulo")}
+        {...register("titulo", {required: "Título é obrigatório"})}
         error={!!errors.titulo}
         helperText={errors.titulo?.message}
+        InputLabelProps={{ shrink: true }}
         />
 
         <TextField id="desc" label="Descrição" 
-          {...register("desc")}
+          {...register("desc", {required: "Descrição é obrigatória"})}
           error={!!errors.desc}
           helperText={errors.desc?.message}
+          InputLabelProps={{ shrink: true }}
         />
         
         <FormControl fullWidth>
@@ -99,7 +98,8 @@ export function EditTicket() {
           <Select 
           labelId="prioridade-select-label" 
           id="prioridade-select"
-          {...register("prioridade")}
+          {...register("prioridade", {required: "Prioridade é obrigatória"})}
+          value={form.watch("prioridade")}
           >
             <MenuItem value='1'>1</MenuItem>
             <MenuItem value='2'>2</MenuItem>
@@ -115,10 +115,11 @@ export function EditTicket() {
           <Select 
             labelId="produto-select-label" 
             id="produto-select" 
-            {...register("produto")}
+            {...register("produto", {required: "Produto é obrigatório"})}
+            value={form.watch("produto")}
           >
             {products.map((product) => (
-              <MenuItem key={product.id} value={""+product.id}>{product.nome}</MenuItem>
+              <MenuItem key={product.id} value={`${product.id}`}>{product.nome}</MenuItem>
             ))}
           </Select>
         </FormControl>
