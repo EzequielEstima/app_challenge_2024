@@ -17,9 +17,9 @@ export function ListTickets() {
     const ticketService = new TicketService();
     ticketService.getTickets().then((tickets) => setTickets(tickets));
 
-    const productServer = new ProdutoService();
+    const productService = new ProdutoService();
 
-    productServer.getProdutos().then((produtos) => {debugger; console.log(produtos); setProducts([...produtos]?? [])});
+    productService.getProdutos().then((produtos) => setProducts([...produtos]?? []));
   }, []); // No dependencies, so it only runs once at the start
   
   function handleDetalhesClick(ticket: Ticket) {
