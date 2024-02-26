@@ -1,0 +1,14 @@
+/* App.css */
+.navbar-container {
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: flex-start; /* Align items to the start (top) */
+  margin-top: 10px;
+}
+
+.content-container {
+  flex-grow: 1; /* Allow content container to grow and take remaining space */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,14 @@
+.stack-container {
+    align-content: center;
+    width: 400px;
+}
+
+.stack-container p {
+    margin-bottom: 0.5rem; /* Adjust spacing between paragraphs */
+}
+
+.stack-container button {
+    margin-top: 1rem; /* Adjust spacing between buttons */
+    margin-right:75px; /* Adjust spacing between buttons */
+    width: 125px;
+}
