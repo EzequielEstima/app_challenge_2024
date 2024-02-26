@@ -49,7 +49,6 @@ export class TicketService {
             data: ticket
         })
         return res;
-        //TODO error handling
     }
 
     async updateTicket(id: number, newTicket : UpdateTicketDTO){
@@ -60,6 +59,6 @@ export class TicketService {
             data: newTicket
         })
 
-        //TODO error handling
+        return res;
     }
 }

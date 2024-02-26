@@ -49,7 +49,12 @@ export function CreateTicketForm1() {
       descricao: data.desc,
       prioridade: parseInt(data.prioridade),
       produtoId: parseInt(data.produto)
-    })
+    }).then(() => {
+      alert('Ticket criado com sucesso');
+    }).catch(() => {
+      alert('Erro ao criar ticket');
+    });
+
   }
 
   return (

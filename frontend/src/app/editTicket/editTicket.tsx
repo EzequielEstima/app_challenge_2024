@@ -64,7 +64,11 @@ export function EditTicket() {
         prioridade: parseInt(data.prioridade),
         produtoId: parseInt(data.produto)
       }
-    )
+    ).then(() => {
+      alert('Ticket editado com sucesso');
+    }).catch(() => {
+      alert('Erro ao editar ticket');
+    });
 		
 	}
 
