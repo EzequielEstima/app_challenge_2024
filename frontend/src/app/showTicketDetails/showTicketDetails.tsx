@@ -26,7 +26,7 @@ export function ShowTicketDetails() {
       .catch(() => navigate('/tickets'));
 
     const produtoService = new ProdutoService();
-    produtoService.getProdutos().then((produtos) => setProducts(produtos));
+    produtoService.getProdutos().then((listaProdutosModel) => setProducts(listaProdutosModel.products));
 
   }, [id]); // No dependencies, so it only runs once at the start
 
@@ -39,7 +39,7 @@ export function ShowTicketDetails() {
       {/* Only null and undefiend */}
       <p>Descrição: { ticket?.descricao || 'NA'}</p>
       <p>Prioridade: {ticket ? ticket.prioridade : 'NA'}</p>
-      <p>Produto: {ticket ? products?.find( (prod) => prod.id === ticket.produtoId)?.nome : 'NA'}</p>
+      <p>Produto: {ticket ? products?.find( (prod) => prod.productId === ticket.produtoId)?.nome : 'NA'}</p>
       <div>
         {/* <Link to="/tickets">
           <Button variant="contained">Voltar</Button>

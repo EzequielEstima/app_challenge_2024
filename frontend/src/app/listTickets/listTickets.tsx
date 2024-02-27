@@ -15,15 +15,16 @@ export function ListTickets() {
 
   useEffect( () => {
     const ticketService = new TicketService();
-    ticketService.getTickets().then((tickets) => setTickets(tickets));
+    ticketService.getTickets().then((listaticketsModel) => setTickets(listaticketsModel.tickets));
 
     const productService = new ProdutoService();
 
-    productService.getProdutos().then((produtos) => setProducts([...produtos]?? []));
+    productService.getProdutos().then((listaProdutosModel) => {setProducts(listaProdutosModel.products)});
+
   }, []); // No dependencies, so it only runs once at the start
   
   function handleDetalhesClick(ticket: Ticket) {
-    navigate('/tickets/' + ticket.id);
+    navigate(`/tickets/${ticket.ticketId}`);
   }
 
   return (
@@ -43,7 +44,7 @@ export function ListTickets() {
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">{ticket.titulo}</TableCell>
-              <TableCell>{products.find((produto) => produto.id === ticket.produtoId)?.nome}</TableCell>
+              <TableCell>{products.find((produto) => produto.productId === ticket.produtoId)?.nome}</TableCell>
               <TableCell>
                 <Button variant="contained" onClick={() => handleDetalhesClick(ticket) }>Detalhes</Button>
               </TableCell>

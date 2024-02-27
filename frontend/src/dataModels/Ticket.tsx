@@ -1,5 +1,5 @@
 export interface Ticket {
-    id: number;
+    ticketId: number;
     titulo: string;
     descricao: string;
     prioridade: number;

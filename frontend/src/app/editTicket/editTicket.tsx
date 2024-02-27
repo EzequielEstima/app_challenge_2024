@@ -40,7 +40,7 @@ export function EditTicket() {
     if(!id) return;
 
     const productServer = new ProdutoService();
-    productServer.getProdutos().then((produtos) => setProducts(produtos));
+    productServer.getProdutos().then((listaProdutosModel) => setProducts(listaProdutosModel.products));
 
     const ticketService = new TicketService();
     ticketService.getTicketById(parseInt(id)).then((ticket) => {
@@ -123,7 +123,7 @@ export function EditTicket() {
             value={form.watch("produto")}
           >
             {products.map((product) => (
-              <MenuItem key={product.id} value={`${product.id}`}>{product.nome}</MenuItem>
+              <MenuItem key={product.productId} value={`${product.productId}`}>{product.nome}</MenuItem>
             ))}
           </Select>
         </FormControl>

@@ -36,7 +36,7 @@ export function CreateTicketForm1() {
 
     const productServer = new ProdutoService();
 
-    productServer.getProdutos().then((produtos) => setProducts(produtos));
+    productServer.getProdutos().then((listaProdutosModel) => setProducts(listaProdutosModel.products));
 
   }, []); 
 
@@ -104,7 +104,7 @@ export function CreateTicketForm1() {
               error = {!!errors.produto}
             >
               {products.map((product) => (
-                <MenuItem key={product.id} value={""+product.id}>{product.nome}</MenuItem>
+                <MenuItem key={product.productId} value={`${product.productId}`}>{product.nome}</MenuItem>
               ))}
             </Select>
             {!!errors.produto && <FormHelperText error>{errors.produto.message}</FormHelperText>}

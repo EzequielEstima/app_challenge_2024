@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Ticket } from "../dataModels/Ticket";
 import { devEnvironment } from "../environments/devEnvironments";
+import { ListaTickets } from "../dataModels/ListaTickets";
 
 export interface CreateTicketDTO {
     titulo: string,
@@ -20,8 +21,8 @@ const TICKETS_URL = devEnvironment.BACKEND_URL + "/Tickets";
 
 export class TicketService {
 
-    async getTickets() :  Promise<Ticket[]>{
-        let res = await axios.request<Ticket[]>({
+    async getTickets() :  Promise<ListaTickets>{
+        let res = await axios.request<ListaTickets>({
             method: 'GET',
             url: TICKETS_URL
         })

@@ -1,20 +1,19 @@
 import axios from "axios";
 import { Produto } from "../dataModels/Produto";
 import { devEnvironment } from "../environments/devEnvironments";
+import { ListaProdutos } from "../dataModels/ListaProdutos";
 
 
 const PRODUTOS_URL = devEnvironment.BACKEND_URL + "/Products";
 
 export class ProdutoService{
-    async getProdutos(): Promise<Produto[]>{
-      let res = await axios.request<Produto[]>({
+    async getProdutos(): Promise<ListaProdutos>{
+      let res = await axios.request<ListaProdutos>({
         method: 'GET',
         url: PRODUTOS_URL
       })
       
       return res.data;
-
-      //return produtos;
     }
 
     async getProdutoById(id: number){
@@ -27,12 +26,5 @@ export class ProdutoService{
       return res.data;
   
       //TODO handle error
-
-
-      // const res = produtos.find((prod) => prod.id === id)
-
-      // if(!res) throw new Error("FML");
-
-      // return res;
     }
 }
