@@ -10,9 +10,9 @@ namespace backend.Controllers;
 public class TicketsController : ControllerBase {
 
     static List<Ticket> tickets = new List<Ticket> {
-        new Ticket { Id = 1, Titulo = "Ticket 12222", Descricao = "Descrição do Ticket 1", Prioridade = 1, ProdutoId = 3 },
-        new Ticket { Id = 2, Titulo = "Ticket 2", Descricao = "Descrição do Ticket 2", Prioridade = 3, ProdutoId = 2},
-        new Ticket { Id = 3, Titulo = "Ticket 3", Descricao = "Descrição do Ticket 3", Prioridade = 5, ProdutoId = 1},
+        new Ticket { TicketId = 1, Titulo = "Ticket 12222", Descricao = "Descrição do Ticket 1", Prioridade = 1, ProdutoId = 3 },
+        new Ticket { TicketId = 2, Titulo = "Ticket 2", Descricao = "Descrição do Ticket 2", Prioridade = 3, ProdutoId = 2},
+        new Ticket { TicketId = 3, Titulo = "Ticket 3", Descricao = "Descrição do Ticket 3", Prioridade = 5, ProdutoId = 1},
     };
 
     static int ticketCount = 3;
@@ -26,7 +26,7 @@ public class TicketsController : ControllerBase {
     [HttpGet("{id}")]
     public async Task<ActionResult<Ticket>> getTicketById(int id){
         
-        var ticket = tickets.Find(ticket => ticket.Id == id);
+        var ticket = tickets.Find(ticket => ticket.TicketId == id);
         
         if (ticket == null) return NotFound();
         
@@ -38,7 +38,7 @@ public class TicketsController : ControllerBase {
         // TODO : implemnt constructor in the Ticket class
 
         Ticket ticket = new Ticket {
-            Id = ++ticketCount, // first increments the variable, then sets id to the incremented value
+            TicketId = ++ticketCount, // first increments the variable, then sets id to the incremented value
             Titulo = createTicketDTO.Titulo,
             Descricao = createTicketDTO.Descricao,
             Prioridade = createTicketDTO.Prioridade,
@@ -46,14 +46,14 @@ public class TicketsController : ControllerBase {
         };
         
         tickets.Add(ticket);
-        return CreatedAtAction(nameof(getTicketById), new { id = ticket.Id }, ticket);
+        return CreatedAtAction(nameof(getTicketById), new { id = ticket.TicketId }, ticket);
         
     }
 
     [HttpPut("{id}")]
     public async Task<ActionResult<Ticket>> updateTicket(int id, CreateTicketDto createTicketDTO){
         
-        var ticket = tickets.Find(ticket => ticket.Id == id);
+        var ticket = tickets.Find(ticket => ticket.TicketId == id);
         
         if (ticket == null) return NotFound();
 
