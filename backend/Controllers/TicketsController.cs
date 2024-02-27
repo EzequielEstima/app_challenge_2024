@@ -1,5 +1,7 @@
-using backend.Dto;
+using backend.DTO;
+using backend.DTO.Ticket;
 using backend.Models;
+using backend.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 
@@ -9,58 +11,44 @@ namespace backend.Controllers;
 [Route("[controller]")]
 public class TicketsController : ControllerBase {
 
-    static List<Ticket> tickets = new List<Ticket> {
-        new Ticket { TicketId = 1, Titulo = "Ticket 12222", Descricao = "Descrição do Ticket 1", Prioridade = 1, ProdutoId = 3 },
-        new Ticket { TicketId = 2, Titulo = "Ticket 2", Descricao = "Descrição do Ticket 2", Prioridade = 3, ProdutoId = 2},
-        new Ticket { TicketId = 3, Titulo = "Ticket 3", Descricao = "Descrição do Ticket 3", Prioridade = 5, ProdutoId = 1},
-    };
+    private ITicketService ticketService;
 
-    static int ticketCount = 3;
+    public TicketsController(ITicketService ticketService)
+    {
+        this.ticketService = ticketService;
+    }
 
     [HttpGet]
-    public async Task<ActionResult<List<Ticket>>> getTickets(){
-        
-        return tickets;
+    public async Task<ActionResult<ListTicketDTO>> getTickets()
+    {    
+        return await ticketService.GetTickets();
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Ticket>> getTicketById(int id){
-        
-        var ticket = tickets.Find(ticket => ticket.TicketId == id);
+    public async Task<ActionResult<TicketDTO>> getTicketById(int id)
+    {    
+        var ticket = await ticketService.GetTicketById(id);
         
         if (ticket == null) return NotFound();
         
         return ticket;
     }
     [HttpPost]
-    public async Task<ActionResult<Ticket>> createTicket(CreateTicketDto createTicketDTO){
-                
-        // TODO : implemnt constructor in the Ticket class
+    public async Task<ActionResult<TicketDTO>> createTicket(CreateTicketDTO createTicketDTO)
+    {            
+        var ticket = await ticketService.CreateTicket(createTicketDTO);
 
-        Ticket ticket = new Ticket {
-            TicketId = ++ticketCount, // first increments the variable, then sets id to the incremented value
-            Titulo = createTicketDTO.Titulo,
-            Descricao = createTicketDTO.Descricao,
-            Prioridade = createTicketDTO.Prioridade,
-            ProdutoId = createTicketDTO.ProdutoId
-        };
-        
-        tickets.Add(ticket);
         return CreatedAtAction(nameof(getTicketById), new { id = ticket.TicketId }, ticket);
         
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<Ticket>> updateTicket(int id, CreateTicketDto createTicketDTO){
+    public async Task<ActionResult<TicketDTO>> updateTicket(int id, UpdateTicketDTO createTicketDTO)
+    {
         
-        var ticket = tickets.Find(ticket => ticket.TicketId == id);
-        
-        if (ticket == null) return NotFound();
+        var ticket = ticketService.UpdateTicket(id, createTicketDTO);
 
-        ticket.Titulo = createTicketDTO.Titulo;
-        ticket.Descricao = createTicketDTO.Descricao;
-        ticket.Prioridade = createTicketDTO.Prioridade;
-        ticket.ProdutoId = createTicketDTO.ProdutoId;
+        if (ticket == null) return NotFound();
 
         return Ok(ticket);
     }

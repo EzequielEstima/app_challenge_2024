@@ -1,7 +1,7 @@
+using backend.DTO.Product;
 using backend.Models;
-using Microsoft.AspNetCore.Cors;
+using backend.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
 
 namespace backend.Controllers;
 
@@ -9,30 +9,35 @@ namespace backend.Controllers;
 [Route("[controller]")]
 public class ProductsController: ControllerBase {
 
-    List<Product> products = new List<Product> {
-        new Product { ProductId = 1, Nome = "Produto 1" },
-        new Product { ProductId = 2, Nome = "Produto 2" },
-        new Product { ProductId = 3, Nome = "Produto 3" },
-        new Product { ProductId = 4, Nome = "Produto 4" },
-        new Product { ProductId = 5, Nome = "Produto 5" }
-    };
+    private IProductService productService;
+
+    public ProductsController(IProductService productService) {
+        this.productService = productService;
+    }
 
     [HttpGet]
-    public async Task<ActionResult<List<Product>>> GetProducts(){
+    public async Task<ActionResult<ListProductDTO>> GetProducts(){
 
-        return products;
+        return await productService.GetProducts();
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Product>> GetProduct(int id) {
+    public async Task<ActionResult<ProductDTO>> GetProduct(int id) {
         
-        var product = products.Find(p => p.ProductId == id);
+        var product = await productService.GetProductById(id);
 
         if(product == null) {
             return NotFound();
         }
 
         return product;
-    }    
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<ProductDTO>> CreateProduct(CreateProductDTO newProduct) {
+        var product = await productService.CreateProduct(newProduct);
+
+        return CreatedAtAction(nameof(GetProduct), new { id = product.ProductId }, product);
+    }
     
 }

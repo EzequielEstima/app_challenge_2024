@@ -1,3 +1,9 @@
+using backend.Repos.ImplRepos;
+using backend.Repos.IRepos;
+using backend.Services.ImplServices;
+using backend.Services.IServices;
+using Microsoft.Extensions.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,6 +24,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IProductService, ProductService>();
+//builder.Services.AddScoped<IProductRepo, ProductRepo>();
+builder.Services.AddScoped<ITicketService, TicketService>();
+//builder.Services.AddScoped<ITicketRepo, TicketRepo>();
+
 
 var app = builder.Build();
 

@@ -1,6 +1,6 @@
-namespace backend.Dto
+namespace backend.DTO.Ticket
 {
-    public class CreateTicketDto
+    public class CreateTicketDTO
     {
         public string Titulo { get; set; }
         public string Descricao { get; set; }
