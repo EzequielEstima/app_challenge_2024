@@ -12,8 +12,8 @@ public class TicketService : ITicketService
 
     static List<Ticket> tickets = new List<Ticket> 
     {
-        new Ticket { TicketId = 1, Titulo = "Habibi plz help", Descricao = "Descrição do Ticket 1", Prioridade = 1, ProdutoId = 3 },
-        new Ticket { TicketId = 2, Titulo = "Ticket 2", Descricao = "Descrição do Ticket 2", Prioridade = 3, ProdutoId = 2},
+        new Ticket { TicketId = 1, Titulo = "Habibi plz help", Descricao = "Yes habibi", Prioridade = 1, ProdutoId = 3 },
+        new Ticket { TicketId = 2, Titulo = "I'm under the water", Descricao = "GLU GLU", Prioridade = 3, ProdutoId = 2},
         new Ticket { TicketId = 3, Titulo = "Ticket 3", Descricao = "Descrição do Ticket 3", Prioridade = 5, ProdutoId = 1},
     };
 
