@@ -1,8 +1,9 @@
+using backend.Models;
 using backend.Repos.ImplRepos;
 using backend.Repos.IRepos;
 using backend.Services.ImplServices;
 using backend.Services.IServices;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,10 +25,16 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<DomainDBContext>( options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("ConnectionString"));
+});
+
 builder.Services.AddScoped<IProductService, ProductService>();
-//builder.Services.AddScoped<IProductRepo, ProductRepo>();
+builder.Services.AddScoped<IProductRepo, ProductRepo>();
 builder.Services.AddScoped<ITicketService, TicketService>();
-//builder.Services.AddScoped<ITicketRepo, TicketRepo>();
+builder.Services.AddScoped<ITicketRepo, TicketRepo>();
 
 
 var app = builder.Build();

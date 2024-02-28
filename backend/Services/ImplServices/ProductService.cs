@@ -8,7 +8,7 @@ namespace backend.Services.ImplServices;
 
 public class ProductService : IProductService
 {
-    //private IProductRepo productRepo;
+    private IProductRepo productRepo;
 
     static List<Product> products = new List<Product> {
         new Product { ProductId = 1, Nome = "Produto 1" },
@@ -20,9 +20,9 @@ public class ProductService : IProductService
 
     static int nextId = 6;
 
-    public ProductService(/*IProductRepo productRepo*/)
+    public ProductService(IProductRepo productRepo)
     {
-        //this.productRepo = productRepo;
+        this.productRepo = productRepo;
     }
 
     public Task<ProductDTO> CreateProduct(CreateProductDTO newProduct)

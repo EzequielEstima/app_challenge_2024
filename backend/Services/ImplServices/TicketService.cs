@@ -8,7 +8,7 @@ namespace backend.Services.ImplServices;
 
 public class TicketService : ITicketService
 {
-    //private IProductRepo productRepo;
+    private ITicketRepo ticketRepo;
 
     static List<Ticket> tickets = new List<Ticket> 
     {
@@ -19,9 +19,9 @@ public class TicketService : ITicketService
 
     static int nextTicketId = 4;
 
-    public TicketService(/*IProductRepo productRepo*/)
+    public TicketService(ITicketRepo ticketRepo)
     {
-        //this.productRepo = productRepo;
+        this.ticketRepo = ticketRepo;
     }
 
     public Task<TicketDTO> CreateTicket(CreateTicketDTO newTicket)
