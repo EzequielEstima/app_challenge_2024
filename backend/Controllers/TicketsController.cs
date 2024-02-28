@@ -1,10 +1,7 @@
-using backend.DTO;
 using backend.DTO.Ticket;
 using backend.Execptions;
-using backend.Models;
 using backend.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
 
 namespace backend.Controllers;
 

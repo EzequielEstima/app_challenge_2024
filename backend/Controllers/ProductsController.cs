@@ -1,6 +1,5 @@
 using backend.DTO.Product;
 using backend.Exceptions;
-using backend.Models;
 using backend.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
