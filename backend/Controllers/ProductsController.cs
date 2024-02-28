@@ -1,4 +1,5 @@
 using backend.DTO.Product;
+using backend.Exceptions;
 using backend.Models;
 using backend.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
@@ -23,14 +24,16 @@ public class ProductsController: ControllerBase {
 
     [HttpGet("{id}")]
     public async Task<ActionResult<ProductDTO>> GetProduct(int id) {
-        
-        var product = await productService.GetProductById(id);
-
-        if(product == null) {
-            return NotFound();
+        ProductDTO? product;
+        try
+        {
+            product = await productService.GetProductById(id);
         }
-
-        return product;
+        catch (ProductNotFoundException e)
+        { 
+            return NotFound(e.Message);
+        }
+        return Ok(product);
     }
 
     [HttpPost]

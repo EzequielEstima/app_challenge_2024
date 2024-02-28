@@ -1,4 +1,5 @@
 using backend.DTO.Product;
+using backend.Exceptions;
 using backend.Mappers;
 using backend.Models;
 using backend.Repos.IRepos;
@@ -27,7 +28,7 @@ public class ProductService : IProductService
         var product = await productRepo.getProductById(id);
 
         if(product == null) {
-            return null;
+            throw new ProductNotFoundException("Product not found");
         }
 
         return ProductMapper.ToProductDTO(product);

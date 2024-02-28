@@ -1,4 +1,6 @@
 using backend.DTO.Ticket;
+using backend.Exceptions;
+using backend.Execptions;
 using backend.Mapper;
 using backend.Models;
 using backend.Repos.IRepos;
@@ -12,13 +14,6 @@ public class TicketService : ITicketService
     private ITicketRepo ticketRepo;
     private IProductRepo productRepo;
 
-    static List<Ticket> tickets = new List<Ticket> 
-    {
-        new Ticket { TicketId = 1, Titulo = "Habibi plz help", Descricao = "Yes habibi", Prioridade = 1, ProdutoId = 3 },
-        new Ticket { TicketId = 2, Titulo = "I'm under the water", Descricao = "GLU GLU", Prioridade = 3, ProdutoId = 2},
-        new Ticket { TicketId = 3, Titulo = "Ticket 3", Descricao = "Descrição do Ticket 3", Prioridade = 5, ProdutoId = 1},
-    };
-
     public TicketService(ITicketRepo ticketRepo, IProductRepo productRepo)
     {
         this.ticketRepo = ticketRepo;
@@ -31,7 +26,7 @@ public class TicketService : ITicketService
         var product = await productRepo.getProductById(newTicket.ProdutoId);
 
         if(product == null) {
-            throw new Exception("Produto não encontrado");
+            throw new ProductNotFoundException("Product not found");
         }
 
         var ticket = await ticketRepo.createTicket(new Ticket {
@@ -54,7 +49,7 @@ public class TicketService : ITicketService
         var ticket = await ticketRepo.getTicketById(id);
 
         if(ticket == null) {
-            return null;
+            throw new TicketNotFoundException("Ticket not found");
         }
 
         return TicketMapper.ToTicketDTO(ticket);
@@ -67,7 +62,7 @@ public class TicketService : ITicketService
         var ticket = await ticketRepo.getTicketById(id);
 
         if(ticket == null) {
-            return null;
+            throw new TicketNotFoundException("Ticket not found");
         }
 
         //Update
@@ -80,7 +75,7 @@ public class TicketService : ITicketService
         var updatedTicket = await ticketRepo.updateTicket(ticket);
 
         if(updatedTicket == null) {
-            return null;
+            throw new Exception("Ticket update failed");
         }
     
         return TicketMapper.ToTicketDTO(updatedTicket);
