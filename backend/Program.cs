@@ -28,7 +28,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DomainDBContext>( options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("ConnectionString"));
+    options.UseNpgsql(builder.Configuration.GetValue<string>("ConnectionString"));
 });
 
 builder.Services.AddScoped<IProductService, ProductService>();
