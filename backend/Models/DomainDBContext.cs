@@ -26,7 +26,7 @@ public class DomainDBContext : DbContext{
         modelBuilder.Entity<Product>(
             entity => {
                 entity.HasKey(e => e.ProductId);
-                entity.HasMany(e => e.Tickets).WithOne(e => e.Produto).HasForeignKey(e => e.ProdutoId); //?
+                entity.HasIndex(e => e.Nome).IsUnique();
             }
         );
         
