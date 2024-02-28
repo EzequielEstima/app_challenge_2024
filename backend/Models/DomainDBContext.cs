@@ -19,7 +19,7 @@ public class DomainDBContext : DbContext{
         modelBuilder.Entity<Ticket>(
             entity => {
                 entity.HasKey(e => e.TicketId);
-                entity.HasOne(e => e.Produto).WithMany(e => e.Tickets).HasForeignKey(e => e.ProdutoId);
+                entity.HasOne(e => e.Produto).WithMany(p => p.Tickets).HasForeignKey(e => e.ProdutoId);
             }
         );
 

@@ -4,6 +4,6 @@ namespace backend.Models
     {
         public int ProductId { get; set; }
         public string Nome { get; set; }
-        public ICollection<Ticket> Tickets { get; set; }
+        public virtual ICollection<Ticket> Tickets { get; set; }
     }
 }

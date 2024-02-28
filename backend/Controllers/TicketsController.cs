@@ -46,7 +46,7 @@ public class TicketsController : ControllerBase {
     public async Task<ActionResult<TicketDTO>> updateTicket(int id, UpdateTicketDTO createTicketDTO)
     {
         
-        var ticket = ticketService.UpdateTicket(id, createTicketDTO);
+        var ticket = await ticketService.UpdateTicket(id, createTicketDTO);
 
         if (ticket == null) return NotFound();
 

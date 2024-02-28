@@ -3,12 +3,14 @@ using backend.Mapper;
 using backend.Models;
 using backend.Repos.IRepos;
 using backend.Services.IServices;
+using Microsoft.VisualBasic;
 
 namespace backend.Services.ImplServices;
 
 public class TicketService : ITicketService
 {
     private ITicketRepo ticketRepo;
+    private IProductRepo productRepo;
 
     static List<Ticket> tickets = new List<Ticket> 
     {
@@ -17,58 +19,70 @@ public class TicketService : ITicketService
         new Ticket { TicketId = 3, Titulo = "Ticket 3", Descricao = "Descrição do Ticket 3", Prioridade = 5, ProdutoId = 1},
     };
 
-    static int nextTicketId = 4;
-
-    public TicketService(ITicketRepo ticketRepo)
+    public TicketService(ITicketRepo ticketRepo, IProductRepo productRepo)
     {
         this.ticketRepo = ticketRepo;
+        this.productRepo = productRepo;
     }
 
-    public Task<TicketDTO> CreateTicket(CreateTicketDTO newTicket)
+    public async Task<TicketDTO> CreateTicket(CreateTicketDTO newTicket)
     {
-        var ticket = new Ticket {
-            TicketId = nextTicketId++,
+
+        var product = await productRepo.getProductById(newTicket.ProdutoId);
+
+        if(product == null) {
+            throw new Exception("Produto não encontrado");
+        }
+
+        var ticket = await ticketRepo.createTicket(new Ticket {
             Titulo = newTicket.Titulo,
             Descricao = newTicket.Descricao,
             Prioridade = newTicket.Prioridade,
-            ProdutoId = newTicket.ProdutoId
-        };
+            ProdutoId = newTicket.ProdutoId,
+        });
 
-        tickets.Add(ticket); //TODO call repo
-
-        return Task.FromResult(TicketMapper.ToTicketDTO(ticket));
+        return TicketMapper.ToTicketDTO(ticket);
     }
 
-    public Task<TicketDTO?> GetTicketById(int id)
+
+    public async Task<ListTicketDTO> GetTickets()
     {
-        var ticket = tickets.FirstOrDefault(p => p.TicketId == id);// TODO call repo
+        return TicketMapper.ToListTicketDTO(await ticketRepo.getTickets());
+    }
+    public async Task<TicketDTO?> GetTicketById(int id)
+    {
+        var ticket = await ticketRepo.getTicketById(id);
 
         if(ticket == null) {
-            return Task.FromResult<TicketDTO?>(null);
+            return null;
         }
 
-        return Task.FromResult<TicketDTO?>(TicketMapper.ToTicketDTO(ticket));
+        return TicketMapper.ToTicketDTO(ticket);
 
     }
 
-    public Task<ListTicketDTO> GetTickets()
+    public async Task<TicketDTO?> UpdateTicket(int id, UpdateTicketDTO newticket)
     {
-        return Task.FromResult(TicketMapper.ToListTicketDTO(tickets));// TODO call repo
-    }
-
-    public Task<TicketDTO?> UpdateTicket(int id, UpdateTicketDTO newticket)
-    {
-        var ticket = tickets.FirstOrDefault(p => p.TicketId == id);// TODO call repo
+        //FInd
+        var ticket = await ticketRepo.getTicketById(id);
 
         if(ticket == null) {
-            return Task.FromResult<TicketDTO?>(null);
+            return null;
         }
 
+        //Update
         ticket.Titulo = newticket.Titulo;
         ticket.Descricao = newticket.Descricao;
         ticket.Prioridade = newticket.Prioridade;
         ticket.ProdutoId = newticket.ProdutoId;
 
-        return Task.FromResult<TicketDTO?>(TicketMapper.ToTicketDTO(ticket));
+        //Save
+        var updatedTicket = await ticketRepo.updateTicket(ticket);
+
+        if(updatedTicket == null) {
+            return null;
+        }
+    
+        return TicketMapper.ToTicketDTO(updatedTicket);
     }
 }
