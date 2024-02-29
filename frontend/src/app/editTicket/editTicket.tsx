@@ -128,7 +128,7 @@ export function EditTicket() {
           </Select>
         </FormControl>
 
-        <Button type="submit" variant="contained">Editar</Button>
+        <Button type="submit" variant="contained">Guardar</Button>
 
         <Button variant="contained" onClick={handleGoBackClick}>Voltar</Button>
 
