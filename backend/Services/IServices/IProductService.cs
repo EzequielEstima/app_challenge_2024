@@ -5,7 +5,7 @@ namespace backend.Services.IServices
 {
     public interface IProductService
     {
-        Task<ProductDTO> CreateProduct(CreateProductDTO newProduct);
+        Task<ProductDTO?> CreateProduct(CreateProductDTO newProduct);
         Task<ListProductDTO> GetProducts();
         Task<ProductDTO?> GetProductById(int id);
     }

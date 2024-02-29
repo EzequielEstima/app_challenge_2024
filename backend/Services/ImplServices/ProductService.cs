@@ -16,9 +16,17 @@ public class ProductService : IProductService
         this.productRepo = productRepo;
     }
 
-    public async Task<ProductDTO> CreateProduct(CreateProductDTO newProduct)
+    public async Task<ProductDTO?> CreateProduct(CreateProductDTO newProduct)
     {
-        var product = await productRepo.createProduct(new Product {Nome = newProduct.Nome }); // ID is autoincremented by DB, so we don't need to set it here
+        Product? product;
+        try
+        {
+            product = await productRepo.createProduct(new Product {Nome = newProduct.Nome }); // ID is autoincremented by DB, so we don't need to set it here
+        }
+        catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+        {
+            throw new ProductAlreadyExistsException("Product already exists");
+        }
 
         return ProductMapper.ToProductDTO(product);
     }
@@ -39,3 +47,5 @@ public class ProductService : IProductService
         return ProductMapper.ToListProductDTO(await productRepo.getProducts());
     }
 }
+
+

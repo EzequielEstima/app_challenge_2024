@@ -37,8 +37,17 @@ public class ProductsController: ControllerBase {
 
     [HttpPost]
     public async Task<ActionResult<ProductDTO>> CreateProduct(CreateProductDTO newProduct) {
-        var product = await productService.CreateProduct(newProduct);
+        
+        ProductDTO? product;
 
+        try
+        {
+            product = await productService.CreateProduct(newProduct);
+        }
+        catch (ProductAlreadyExistsException e)
+        {
+            return BadRequest(e.Message);
+        }
         return CreatedAtAction(nameof(GetProduct), new { id = product.ProductId }, product);
     }
     
