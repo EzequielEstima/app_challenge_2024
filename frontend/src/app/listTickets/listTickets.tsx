@@ -1,10 +1,30 @@
 import { useEffect, useState } from "react";
 import { Ticket } from "../../dataModels/Ticket";
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button } from "@mui/material";
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button, styled, tableCellClasses } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import { TicketService } from "../../service/ticketService";
 import { ProdutoService } from "../../service/produtoService";
 import { Produto } from "../../dataModels/Produto";
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 
 
 export function ListTickets() {
@@ -32,23 +52,23 @@ export function ListTickets() {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Título</TableCell>
-            <TableCell>Produto</TableCell>
-            <TableCell></TableCell>
+            <StyledTableCell>Título</StyledTableCell>
+            <StyledTableCell>Produto</StyledTableCell>
+            <StyledTableCell></StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {tickets.map((ticket) => (
-            <TableRow
+            <StyledTableRow
             key={ticket.titulo}
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell component="th" scope="row">{ticket.titulo}</TableCell>
-              <TableCell>{products.find((produto) => produto.productId === ticket.produtoId)?.nome}</TableCell>
-              <TableCell>
+              <StyledTableCell component="th" scope="row">{ticket.titulo}</StyledTableCell>
+              <StyledTableCell>{products.find((produto) => produto.productId === ticket.produtoId)?.nome}</StyledTableCell>
+              <StyledTableCell>
                 <Button variant="contained" onClick={() => handleDetalhesClick(ticket) }>Detalhes</Button>
-              </TableCell>
-            </TableRow>
+              </StyledTableCell>
+            </StyledTableRow>
           ))}
         </TableBody>
       </Table>
