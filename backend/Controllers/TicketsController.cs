@@ -1,3 +1,4 @@
+using backend.DTO;
 using backend.DTO.Ticket;
 using backend.Exceptions;
 using backend.Execptions;
@@ -19,9 +20,9 @@ public class TicketsController : ControllerBase {
     }
 
     [HttpGet]
-    public async Task<ActionResult<ListTicketDTO>> GetTickets()
+    public async Task<ActionResult<RepositoryResponse<TicketDTO>>> GetTickets([FromQuery] QueryOptionsDTO queryOptionsDTO)
     {    
-        return await ticketService.GetTickets();
+        return await ticketService.GetTickets(queryOptionsDTO);
     }
 
     [HttpGet("{id}")]

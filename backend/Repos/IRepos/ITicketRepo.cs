@@ -1,10 +1,11 @@
 
+using backend.DTO;
 using backend.Models;
 
 namespace backend.Repos.IRepos;
 public interface ITicketRepo
 {
-    Task<IEnumerable<Ticket>> getTickets();
+    Task<RepositoryResponse<Ticket>> getTickets(RepositoryRequest opt);
     Task<Ticket?> getTicketById(int id);
     Task<Ticket> createTicket(Ticket newTicket);
     Task createTickets(IEnumerable<Ticket> tickets);

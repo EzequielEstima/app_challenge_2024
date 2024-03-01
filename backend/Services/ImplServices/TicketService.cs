@@ -1,3 +1,4 @@
+using backend.DTO;
 using backend.DTO.Ticket;
 using backend.Exceptions;
 using backend.Execptions;
@@ -43,9 +44,21 @@ public class TicketService : ITicketService
     }
 
 
-    public async Task<ListTicketDTO> GetTickets()
+    public async Task<RepositoryResponse<TicketDTO>> GetTickets(QueryOptionsDTO queryOptionsDTO)
     {
-        return TicketMapper.ToListTicketDTO(await ticketRepo.getTickets());
+
+        var repoRequest = new RepositoryRequest {
+            Page = queryOptionsDTO.Page,
+            PageLength = queryOptionsDTO.PageLength
+        };
+
+        var repoRes =  await ticketRepo.getTickets(repoRequest);
+
+        return new RepositoryResponse<TicketDTO> {
+            Items = repoRes.Items.Select(TicketMapper.ToTicketDTO), // Transforms each item into a TicketDTO
+            TotalItems = repoRes.TotalItems
+        }; 
+        
     }
     public async Task<TicketDTO?> GetTicketById(int id)
     {

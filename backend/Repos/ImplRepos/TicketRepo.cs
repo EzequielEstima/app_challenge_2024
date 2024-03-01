@@ -1,3 +1,4 @@
+using backend.DTO;
 using backend.Models;
 using backend.Repos.IRepos;
 using Microsoft.EntityFrameworkCore;
@@ -42,9 +43,27 @@ public class TicketRepo : ITicketRepo
         return await dbContext.Tickets.FindAsync(id);
     }
 
-    public async Task<IEnumerable<Ticket>> getTickets()
+    public async Task<RepositoryResponse<Ticket>> getTickets(RepositoryRequest opt)
     {
-        return await dbContext.Tickets.Take(100000).ToListAsync();
+        var query = dbContext.Tickets.AsQueryable();
+
+        var totalTickets = query.Count();
+
+        IEnumerable<Ticket> tickets;
+
+        if (opt.Page.HasValue && opt.PageLength.HasValue){
+            tickets = await query.Skip(opt.Page.Value * opt.PageLength.Value)
+                                    .Take(opt.PageLength.Value)
+                                    .ToListAsync();
+        }else{
+            tickets = await query.ToListAsync();
+        }
+        
+
+        return new RepositoryResponse<Ticket> {
+            Items = tickets,
+            TotalItems = totalTickets
+        };
     }
 
     public async Task<Ticket?> updateTicket(Ticket newticket)
