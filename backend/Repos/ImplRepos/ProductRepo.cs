@@ -23,6 +23,12 @@ public class ProductRepo : IProductRepo
         return newProduct;
     }
 
+    public async Task createProducts(IEnumerable<Product> products)
+    {
+        dbContext.Products.AddRange(products);
+        await dbContext.SaveChangesAsync();
+    }
+
     public async Task deleteProduct(int id)
     {
         var product = await dbContext.Products.FindAsync(id);

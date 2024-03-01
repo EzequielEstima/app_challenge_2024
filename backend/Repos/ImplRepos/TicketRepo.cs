@@ -20,6 +20,12 @@ public class TicketRepo : ITicketRepo
         return newTicket;
     }
 
+    public async Task createTickets(IEnumerable<Ticket> tickets)
+    {
+        dbContext.Tickets.AddRange(tickets);
+        await dbContext.SaveChangesAsync();
+    }
+
     public async Task deleteTicket(int id)
     {
         var ticket = await dbContext.Tickets.FindAsync(id);
@@ -38,7 +44,7 @@ public class TicketRepo : ITicketRepo
 
     public async Task<IEnumerable<Ticket>> getTickets()
     {
-        return await dbContext.Tickets.ToListAsync();
+        return await dbContext.Tickets.Take(100000).ToListAsync();
     }
 
     public async Task<Ticket?> updateTicket(Ticket newticket)
