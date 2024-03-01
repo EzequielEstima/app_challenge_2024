@@ -39,7 +39,18 @@ export function CreateTicketForm1() {
 
     const productServer = new ProdutoService();
 
-    productServer.getProdutos().then((listaProdutosModel) => setProducts(listaProdutosModel.products));
+    productServer.getProdutos()
+    .then((listaProdutosModel) => setProducts(listaProdutosModel.products))
+    .catch((error) => {
+      if(error.code === 'ERR_NETWORK') {
+        alert('Não foi possível ligar ao servidor');
+        navigate('/');
+      }else {
+        alert(`Não foi possível obter a lista de produtos \n\nERRO : ${error.response.data}`);
+        navigate('/');
+      }
+
+    })
 
   }, []); 
 
@@ -57,7 +68,7 @@ export function CreateTicketForm1() {
       if(error.code === 'ERR_NETWORK') {
         alert('Não foi possível ligar ao servidor');
         navigate('/');
-      }else{
+      }else {
         alert(`Não foi possível criar o ticket \n\nERRO : ${error.response.data}`)
       }
     });
