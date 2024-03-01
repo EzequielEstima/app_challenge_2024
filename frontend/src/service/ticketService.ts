@@ -2,6 +2,8 @@ import axios from "axios";
 import { Ticket } from "../dataModels/Ticket";
 import { devEnvironment } from "../environments/devEnvironments";
 import { ListaTickets } from "../dataModels/ListaTickets";
+import { QueryOptions } from "@testing-library/react";
+import { QueryOptionsDTO } from "../dataModels/QueryOptionsDTO";
 
 export interface CreateTicketDTO {
     titulo: string,
@@ -21,11 +23,12 @@ const TICKETS_URL = devEnvironment.BACKEND_URL + "/Tickets";
 
 export class TicketService {
 
-    async getTickets(abortController?: AbortController) :  Promise<ListaTickets>{
+    async getTickets(query: QueryOptionsDTO, abortController?: AbortController) :  Promise<ListaTickets>{
         let res = await axios.request<ListaTickets>({
             method: 'GET',
             url: TICKETS_URL,
-            signal: abortController?.signal
+            signal: abortController?.signal,
+            params: query
         })
         
         return res.data;

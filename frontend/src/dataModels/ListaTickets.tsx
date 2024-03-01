@@ -1,5 +1,7 @@
 import { Ticket } from "./Ticket";
 
 export interface ListaTickets {
-    tickets: Ticket[];
+    items: Ticket[];
+    totalItems: number;
 }
+

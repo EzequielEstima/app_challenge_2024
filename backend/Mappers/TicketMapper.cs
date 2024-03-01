@@ -18,12 +18,5 @@ namespace backend.Mapper
                 ProdutoId = ticket.ProdutoId
             };
         }
-        public static ListTicketDTO ToListTicketDTO(IEnumerable<Ticket> tickets)
-        {
-            return new ListTicketDTO
-            {
-                Tickets = tickets.Select(ToTicketDTO).ToList()
-            };
-        }
     }
 }
