@@ -26,6 +26,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+const abortController = new AbortController();
 
 export function ListTickets() {
   const navigate = useNavigate();
@@ -34,12 +35,35 @@ export function ListTickets() {
   const [products, setProducts] = useState<Produto[]>([]);
 
   useEffect( () => {
+    
     const ticketService = new TicketService();
-    ticketService.getTickets().then((listaticketsModel) => setTickets(listaticketsModel.tickets));
+    ticketService.getTickets(abortController)
+    .then((listaticketsModel) => setTickets(listaticketsModel.tickets))
+    .catch((error) => {
+      if (error.code === 'ERR_NETWORK') {
+        alert('Não foi possível ligar ao servidor');
+        abortController.abort();
+        navigate('/')
+      }else if(error.code !== "ERR_CANCELED"){
+        alert(`Não foi possível obter a lista de tickets \n${error.response.data}`)
+        navigate('/')
+      }        
+    });
 
     const productService = new ProdutoService();
 
-    productService.getProdutos().then((listaProdutosModel) => {setProducts(listaProdutosModel.products)});
+    productService.getProdutos(abortController)
+    .then((listaProdutosModel) => setProducts(listaProdutosModel.products))
+    .catch((error) =>{
+      if (error.code === 'ERR_NETWORK') {
+        abortController.abort();
+        alert('Não foi possível ligar ao servidor');
+        navigate('/');
+      }else if(error.code !== "ERR_CANCELED"){
+        alert(`Não foi possível obter a lista de produtos \n${error.response.data}`)
+        navigate('/')
+      }
+    })
 
   }, []); // No dependencies, so it only runs once at the start
   

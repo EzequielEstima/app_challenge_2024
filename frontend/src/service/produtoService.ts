@@ -7,10 +7,11 @@ import { ListaProdutos } from "../dataModels/ListaProdutos";
 const PRODUTOS_URL = devEnvironment.BACKEND_URL + "/Products";
 
 export class ProdutoService{
-    async getProdutos(): Promise<ListaProdutos>{
+    async getProdutos(abortController?: AbortController): Promise<ListaProdutos>{
       let res = await axios.request<ListaProdutos>({
         method: 'GET',
-        url: PRODUTOS_URL
+        url: PRODUTOS_URL,
+        signal: abortController?.signal
       })
       
       return res.data;

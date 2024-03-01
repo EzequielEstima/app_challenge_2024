@@ -21,24 +21,24 @@ const TICKETS_URL = devEnvironment.BACKEND_URL + "/Tickets";
 
 export class TicketService {
 
-    async getTickets() :  Promise<ListaTickets>{
+    async getTickets(abortController?: AbortController) :  Promise<ListaTickets>{
         let res = await axios.request<ListaTickets>({
             method: 'GET',
-            url: TICKETS_URL
+            url: TICKETS_URL,
+            signal: abortController?.signal
         })
         
-        //TODO error handling
         return res.data;
     
     }
 
-    async getTicketById(id: number) :  Promise<Ticket>{
+    async getTicketById(id: number, abortController?: AbortController) :  Promise<Ticket>{
         let res = await axios.request<Ticket>({
             method: 'GET',
-            url: TICKETS_URL+ `/${id}`
+            url: TICKETS_URL+ `/${id}`,
+            signal: abortController?.signal
         })
         
-        //TODO error handling
         return res.data;
     }
     

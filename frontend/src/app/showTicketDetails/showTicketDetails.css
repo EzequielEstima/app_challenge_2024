@@ -8,7 +8,5 @@
 }
 
 .stack-container button {
-    margin-top: 1rem; /* Adjust spacing between buttons */
-    margin-right:75px; /* Adjust spacing between buttons */
-    width: 125px;
+    margin-top: 1rem; /* Adjust spacing between button and paragraphs */
 }

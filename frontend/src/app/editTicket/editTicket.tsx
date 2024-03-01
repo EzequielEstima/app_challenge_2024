@@ -14,6 +14,8 @@ type FormValues = {
   produto: string
 }
 
+const abortController = new AbortController();
+
 export function EditTicket() {
 
   const navigate = useNavigate();
@@ -39,15 +41,37 @@ export function EditTicket() {
 
     if(!id) return;
 
-    const productServer = new ProdutoService();
-    productServer.getProdutos().then((listaProdutosModel) => setProducts(listaProdutosModel.products));
+    const productService = new ProdutoService();
+    productService.getProdutos(abortController)
+    .then((listaProdutosModel) => setProducts(listaProdutosModel.products))
+    .catch((error) =>{
+      if (error.code === 'ERR_NETWORK') {
+        abortController.abort(); // Abort other requests
+        alert('Não foi possível ligar ao servidor');
+        navigate('/')
+      } else if(error.code !== "ERR_CANCELED"){ // Ignore aborted requests
+        alert(`Não foi possível obter a lista de produtos \n\n ERRO : ${error.response.data}`)
+        navigate('/tickets')
+      }
+    });
 
     const ticketService = new TicketService();
-    ticketService.getTicketById(parseInt(id)).then((ticket) => {
+    ticketService.getTicketById(parseInt(id))
+    .then((ticket) => {
       form.setValue('titulo', ticket.titulo);
       form.setValue('desc', ticket.descricao);
       form.setValue('prioridade', ticket.prioridade.toString());
       form.setValue('produto', ticket.produtoId.toString());
+    })
+    .catch((error) => {
+      if (error.code === 'ERR_NETWORK') {
+        abortController.abort(); // Abort other requests
+        alert('Não foi possível ligar ao servidor');
+        navigate('/')
+      } else if(error.code !== "ERR_CANCELED"){ // Ignore aborted requests
+        alert(`Não foi possível obter os dados do o ticket \n\n ERRO : ${error.response.data}`)
+        navigate('/tickets')
+      }
     });
  	}, []); 
 	
@@ -66,8 +90,12 @@ export function EditTicket() {
       }
     ).then(() => {
       alert('Ticket editado com sucesso');
-    }).catch(() => {
-      alert('Erro ao editar ticket');
+    }).catch((error) => {
+      if (error.code === 'ERR_NETWORK') {
+        alert('Não foi possível ligar ao servidor');
+      } else {
+        alert(`Erro ao editar ticket\n\nERRO : ${error.response.data}`);
+      }
     });
 		
 	}

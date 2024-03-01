@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { TicketService } from '../../service/ticketService';
 import { ProdutoService } from '../../service/produtoService';
+import { useNavigate } from 'react-router-dom';
 
 
 type FormValues = {
@@ -16,6 +17,8 @@ type FormValues = {
 }
 
 export function CreateTicketForm1() {
+
+  const navigate = useNavigate();
 
   const [products, setProducts] = useState<Produto[]>([]);
 
@@ -42,7 +45,6 @@ export function CreateTicketForm1() {
 
   function handleCreateClick(data : FormValues ) {
     
-    
     const ticketService = new TicketService();
     ticketService.createTicket({
       titulo: data.titulo,
@@ -51,8 +53,13 @@ export function CreateTicketForm1() {
       produtoId: parseInt(data.produto)
     }).then(() => {
       alert('Ticket criado com sucesso');
-    }).catch(() => {
-      alert('Erro ao criar ticket');
+    }).catch((error) => {
+      if(error.code === 'ERR_NETWORK') {
+        alert('Não foi possível ligar ao servidor');
+        navigate('/');
+      }else{
+        alert(`Não foi possível criar o ticket \n\nERRO : ${error.response.data}`)
+      }
     });
 
   }
