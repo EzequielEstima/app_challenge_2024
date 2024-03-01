@@ -1,5 +1,7 @@
 using backend.DTO.Ticket;
+using backend.Exceptions;
 using backend.Execptions;
+using backend.Models;
 using backend.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,8 +41,20 @@ public class TicketsController : ControllerBase {
     }
     [HttpPost]
     public async Task<ActionResult<TicketDTO>> CreateTicket(CreateTicketDTO createTicketDTO)
-    {            
-        var ticket = await ticketService.CreateTicket(createTicketDTO);
+    {       
+        TicketDTO? ticket;     
+        try
+        {
+            ticket = await ticketService.CreateTicket(createTicketDTO);
+        }
+        catch(ProductNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch(InvalidPriorityException e)
+        {
+            return BadRequest(e.Message);
+        }
 
         return CreatedAtAction(nameof(GetTicketById), new { id = ticket.TicketId }, ticket);
         

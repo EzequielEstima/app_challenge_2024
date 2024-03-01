@@ -27,6 +27,10 @@ public class TicketService : ITicketService
         if(product == null) {
             throw new ProductNotFoundException("Product not found");
         }
+        //TODO prly should move this for now it stays here
+        if (newTicket.Prioridade < 1 || newTicket.Prioridade > 5) {
+            throw new InvalidPriorityException("Priority should be between 1 and 5");
+        }
 
         var ticket = await ticketRepo.createTicket(new Ticket {
             Titulo = newTicket.Titulo,
