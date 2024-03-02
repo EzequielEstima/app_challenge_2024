@@ -2,4 +2,4 @@
 
 App to simulate a very simple ticket management system (CRUD operations)
 
-Challenge given in my curricular intership at N4IT to introduce the React framework (frontend), ASP.NET Core (backend) 
+Challenge given in my curricular intership at N4IT to introduce the React framework (frontend) and ASP.NET Core (backend) 
